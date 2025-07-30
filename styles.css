@@ -1,0 +1,48 @@
+h1 {
+	text-align: center;
+	font-weight: bold;
+}
+
+button {
+	width: 60px;
+	height: 40px;
+	margin: 10px 5px;
+}
+
+#equals {
+	height: 100px;
+}
+
+.calculator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.border {
+	border: 1px solid black;
+	padding: 10px;
+}
+
+.calculator-body {
+	display: flex;
+	width: 280px;
+}
+
+.display {
+	border: 2px solid black;
+	width: 270px;
+	height: 40px;
+	margin: 0 auto 10px;
+}
+
+.left-side {
+	display: flex;
+	flex-wrap: wrap;
+	width: 210px;
+}
+
+.right-side {
+	display: flex;
+	flex-direction: column;
+}
