@@ -5,10 +5,22 @@ disp.innerText = "0";
 let x = null;
 let y = null;
 let content = 0;
+let currentOperator = null;
+let isEnteringSecondOperand = false;
 
-function updateDisplay(dispString) {
-	disp.innerText = dispString;
-	content = Number(dispString);
+function resetParams() {
+	x = null;
+	y = null;
+	content = 0;
+	currentOperator = null;
+	isEnteringSecondOperand = false;
+	disp.innerText = "0";
+}
+
+function updateDisplay(dispVal) {
+	const strVal = dispVal.toString();
+	disp.innerText = strVal;
+	content = Number(strVal);
 }
 
 function add(a, b) {
@@ -28,39 +40,70 @@ function divide(a, b) {
 }
 
 function operate(a, b, operator) {
+	console.log(`x: ${a}`);
+	console.log(`y: ${b}`);
+	console.log(`operator: ${operator}`);
 	let result;
 	switch (operator) {
 		case "+":
 			result = add(a, b);
-			updateDisplay(result.toString());
 			break;
 		case "-":
 			result = subtract(a, b);
-			updateDisplay(result.toString());
 			break;
 		case "*":
 			result = multiply(a, b);
-			updateDisplay(result.toString());
 			break;
 		case "/":
-			result = divide(a, b);
-			updateDisplay(result.toString());
+			result = Number(b) !== 0 ? divide(a, b) : "NaN";
 			break;
 		default:
 			console.log(`Error: Operator ${operator} Unknown!`);
-			break;
+			return null;
 	}
+	updateDisplay(result);
+	return result;
+}
+
+function isValNum(num) {
+	const valid = !isNaN(num) && num !== null;
+	return valid;
 }
 
 function numButtonHandler(btn) {
-	disp.innerText === "0"
-		? updateDisplay(btn.id)
-		: updateDisplay(`${disp.innerText}${btn.id}`);
-	content = Number(disp.innerText);
+	if (disp.innerText === "0" || isEnteringSecondOperand) {
+		updateDisplay(btn.id);
+		isEnteringSecondOperand = false;
+	} else {
+		updateDisplay(`${disp.innerText}${btn.id}`);
+	}
 }
 
 function operatorButtonHandler(btn) {
-	console.log(`I am an operator of value ${btn.value}`);
+	if (disp.innerText === "NaN") {
+		alert("Operations cannot be done on NaN");
+		resetParams();
+		return;
+	}
+	if (currentOperator && !isEnteringSecondOperand) {
+		y = content;
+		const result = operate(x, y, currentOperator);
+		x = result;
+	} else {
+		x = content;
+	}
+	currentOperator = btn.value;
+	isEnteringSecondOperand = true;
+}
+
+function evalEquals() {
+	if (currentOperator !== null && !isEnteringSecondOperand) {
+		y = content;
+		const result = operate(x, y, currentOperator);
+		x = result === "NaN" ? null : result;
+		currentOperator = null;
+		isEnteringSecondOperand = true;
+	}
 }
 
 function initButtons() {
@@ -75,6 +118,14 @@ function initButtons() {
 		} else if (btn.className === "operator") {
 			btn.addEventListener("click", () => {
 				operatorButtonHandler(btn);
+			});
+		} else if (btn.id === "equals") {
+			btn.addEventListener("click", () => {
+				evalEquals(btn);
+			});
+		} else if (btn.id === "clear") {
+			btn.addEventListener("click", () => {
+				resetParams();
 			});
 		}
 	});
