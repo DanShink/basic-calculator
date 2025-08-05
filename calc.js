@@ -61,6 +61,7 @@ function operate(a, b, operator) {
 			console.log(`Error: Operator ${operator} Unknown!`);
 			return null;
 	}
+	result = Math.round(result * 10000) / 10000;
 	updateDisplay(result);
 	return result;
 }
