@@ -71,16 +71,16 @@ function isValNum(num) {
 	return valid;
 }
 
-function numButtonHandler(btn) {
+function numButtonHandler(number) {
 	if (disp.innerText === "0" || isEnteringSecondOperand) {
-		updateDisplay(btn.id);
+		updateDisplay(number);
 		isEnteringSecondOperand = false;
 	} else {
-		updateDisplay(`${disp.innerText}${btn.id}`);
+		updateDisplay(`${disp.innerText}${number}`);
 	}
 }
 
-function operatorButtonHandler(btn) {
+function operatorButtonHandler(operator) {
 	if (disp.innerText === "NaN") {
 		alert("Operations cannot be done on NaN");
 		resetParams();
@@ -93,7 +93,7 @@ function operatorButtonHandler(btn) {
 	} else {
 		x = content;
 	}
-	currentOperator = btn.value;
+	currentOperator = operator;
 	isEnteringSecondOperand = true;
 }
 
@@ -108,27 +108,28 @@ function evalEquals() {
 }
 
 function initButtons() {
-	const buttons = document.querySelectorAll("button");
+	const numberButtons = document.querySelectorAll(".number");
+	numberButtons.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			numButtonHandler(btn.innerText);
+		});
+	});
 
-	buttons.forEach((btn) => {
-		// Numbers
-		if (!isNaN(Number(btn.id))) {
-			btn.addEventListener("click", () => {
-				numButtonHandler(btn);
-			});
-		} else if (btn.className === "operator") {
-			btn.addEventListener("click", () => {
-				operatorButtonHandler(btn);
-			});
-		} else if (btn.id === "equals") {
-			btn.addEventListener("click", () => {
-				evalEquals(btn);
-			});
-		} else if (btn.id === "clear") {
-			btn.addEventListener("click", () => {
-				resetParams();
-			});
-		}
+	const operators = document.querySelectorAll(".operator");
+	operators.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			operatorButtonHandler(btn.value);
+		});
+	});
+
+	const equalsButton = document.querySelector("#equals");
+	equalsButton.addEventListener("click", () => {
+		evalEquals();
+	});
+
+	const clearButton = document.querySelector("#clear");
+	clearButton.addEventListener("click", () => {
+		resetParams();
 	});
 }
 
