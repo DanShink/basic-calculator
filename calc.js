@@ -71,7 +71,16 @@ function isValNum(num) {
 	return valid;
 }
 
+function nanCheck() {
+	if (disp.innerText === "NaN") {
+		resetParams();
+		return true;
+	}
+	return false;
+}
+
 function numButtonHandler(number) {
+	if (nanCheck()) return;
 	if (disp.innerText === "0" || isEnteringSecondOperand) {
 		updateDisplay(number);
 		isEnteringSecondOperand = false;
@@ -81,28 +90,27 @@ function numButtonHandler(number) {
 }
 
 function operatorButtonHandler(operator) {
-	if (disp.innerText === "NaN") {
-		alert("Operations cannot be done on NaN");
-		resetParams();
-		return;
-	}
-	if (currentOperator && !isEnteringSecondOperand) {
-		y = content;
-		const result = operate(x, y, currentOperator);
-		x = result;
-	} else {
+	if (nanCheck()) return;
+	if (x === null || currentOperator === null) {
 		x = content;
+	} else if (isValNum(x) && !isValNum(y) && !isEnteringSecondOperand) {
+		y = content;
+		evalEquals();
 	}
-	currentOperator = operator;
 	isEnteringSecondOperand = true;
+	currentOperator = operator;
 }
 
 function evalEquals() {
-	if (currentOperator !== null && !isEnteringSecondOperand) {
+	if (nanCheck()) return;
+	if (y === null && currentOperator !== null && !isEnteringSecondOperand)
 		y = content;
+	if (isValNum(x) && isValNum(y)) {
 		const result = operate(x, y, currentOperator);
-		x = result === "NaN" ? null : result;
+		x = result;
+		y = null;
 		currentOperator = null;
+		updateDisplay(result);
 		isEnteringSecondOperand = true;
 	}
 }
