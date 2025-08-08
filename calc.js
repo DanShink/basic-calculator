@@ -84,7 +84,7 @@ function numButtonHandler(number) {
 	if (disp.innerText === "0" || isEnteringSecondOperand) {
 		updateDisplay(number);
 		isEnteringSecondOperand = false;
-	} else {
+	} else if (disp.innerText.length < 10) {
 		updateDisplay(`${disp.innerText}${number}`);
 	}
 }
@@ -116,7 +116,7 @@ function evalEquals() {
 }
 
 function handleDecimal() {
-	if (disp.innerText.includes(".")) return;
+	if (disp.innerText.includes(".") || disp.innerText.length >= 10) return;
 	disp.innerText = `${disp.innerText}.`;
 }
 
