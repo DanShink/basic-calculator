@@ -115,6 +115,11 @@ function evalEquals() {
 	}
 }
 
+function handleDecimal() {
+	if (disp.innerText.includes(".")) return;
+	disp.innerText = `${disp.innerText}.`;
+}
+
 function initButtons() {
 	const numberButtons = document.querySelectorAll(".number");
 	numberButtons.forEach((btn) => {
@@ -138,6 +143,11 @@ function initButtons() {
 	const clearButton = document.querySelector("#clear");
 	clearButton.addEventListener("click", () => {
 		resetParams();
+	});
+
+	const decimal = document.querySelector("#period");
+	decimal.addEventListener("click", () => {
+		handleDecimal();
 	});
 }
 
